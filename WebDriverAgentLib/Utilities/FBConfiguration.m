@@ -14,7 +14,7 @@
 #include "TargetConditionals.h"
 #import "XCTestPrivateSymbols.h"
 
-static NSUInteger const DefaultStartingPort = 8100;
+static NSUInteger const DefaultStartingPort = 30247;
 static NSUInteger const DefaultPortRange = 100;
 
 static BOOL FBShouldUseTestManagerForVisibilityDetection = NO;
