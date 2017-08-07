@@ -48,6 +48,7 @@
 #import "XCUIDevice+Usage.h"
 #import "XCUIDevice+MTCAppHelper.h"
 
+
 #import "XCTRunnerDaemonSession.h"
 #import <objc/runtime.h>
 
@@ -75,6 +76,7 @@
     
     [[FBRoute POST:@"/tap"].withoutSession respondWithTarget:self action:@selector(handleTapWithoutElement:)],
     [[FBRoute POST:@"/drag"].withoutSession respondWithTarget:self action:@selector(handleDragWithoutSession:)],
+    [[FBRoute POST:@"/dragpath"].withoutSession respondWithTarget:self action:@selector(handleDragPathWithoutSession:)],
     [[FBRoute POST:@"/touchAndHold"].withoutSession respondWithTarget:self action:@selector(handleTouchAndHoldCoordinateWithoutSession:)],
     [[FBRoute POST:@"/keys"].withoutSession respondWithTarget:self action:@selector(handleKeys:)],
 
@@ -95,13 +97,22 @@
 
 + (id<FBResponsePayload>)handleTest:(FBRouteRequest *)request
 {
-  id xcScreen = NSClassFromString(@"XCUIScreen");
-  if (xcScreen) {
-    NSLog(@"start");
-    NSLog(@"%@",  (NSData *)[xcScreen valueForKeyPath:@"mainScreen.screenshot.PNGRepresentation"]);
-    NSLog(@"end");
-  }
-  
+  XCPointerEventPath *path = [[XCPointerEventPath alloc] initForTouchAtPoint:CGPointMake(100.0, 100.0)  offset:0.1];
+  [path moveToPoint:CGPointMake(150.0, 150.0) atOffset:1.0];
+  [path moveToPoint:CGPointMake(200.0, 150.0) atOffset:1.5];
+  [path moveToPoint:CGPointMake(200.0, 350.0) atOffset:2.0];
+  [path moveToPoint:CGPointMake(400.0, 550.0) atOffset:3.0];
+  //[path liftUpAtOffset:4.0];
+  XCSynthesizedEventRecord *r = [[XCSynthesizedEventRecord alloc] initWithName:@"path" interfaceOrientation:UIInterfaceOrientationPortrait];
+  [r addPointerEventPath:path];
+  [r synthesizeWithError:nil];
+  NSLog(@"%@", [path pointerEvents]);
+  /*
+  XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
+ [eventGenerator pressAtPoint:CGPointMake(100.0, 100.0) forDuration:0.1f liftAtPoint:CGPointMake(100.0, 200.0) velocity:1000 orientation:UIInterfaceOrientationPortrait name:@"swipe" handler:^(XCSynthesizedEventRecord *record, NSError *commandError) {
+   [eventGenerator pressAtPoint:CGPointMake(100.0, 200.0) forDuration:0.1f liftAtPoint:CGPointMake(200.0, 200.0) velocity:1000 orientation:UIInterfaceOrientationPortrait name:@"swipe2" handler:^(XCSynthesizedEventRecord *record2, NSError *commandError2) {
+   }];
+  }];*/
   //[ele tap];
  // NSLog(@"%@", err);
   return FBResponseWithOK();
@@ -286,10 +297,17 @@
 
 + (id<FBResponsePayload>)handleDragWithoutSession:(FBRouteRequest *)request
 {
-    CGPoint startPoint = CGPointMake((CGFloat)[request.arguments[@"fromX"] doubleValue], (CGFloat)[request.arguments[@"fromY"] doubleValue]);
-    CGPoint endPoint = CGPointMake((CGFloat)[request.arguments[@"toX"] doubleValue], (CGFloat)[request.arguments[@"toY"] doubleValue]);
-    [[XCUIDevice sharedDevice] mtc_drag:startPoint to:endPoint];
-    return FBResponseWithOK();
+  CGPoint startPoint = CGPointMake((CGFloat)[request.arguments[@"fromX"] doubleValue], (CGFloat)[request.arguments[@"fromY"] doubleValue]);
+  CGPoint endPoint = CGPointMake((CGFloat)[request.arguments[@"toX"] doubleValue], (CGFloat)[request.arguments[@"toY"] doubleValue]);
+  [[XCUIDevice sharedDevice] mtc_drag:startPoint to:endPoint];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleDragPathWithoutSession:(FBRouteRequest *)request
+{
+  NSArray *path = request.arguments[@"path"];
+  [[XCUIDevice sharedDevice] mtc_drag_path:path];
+  return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleTouchAndHoldCoordinateWithoutSession:(FBRouteRequest *)request

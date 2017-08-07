@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mtc_longtap:(CGPoint)point duration:(CGFloat)duration;
 
 - (void)mtc_drag:(CGPoint)fromPoint to:(CGPoint)toPoint;
+- (void)mtc_drag_path:(NSArray *)points;
 
 - (void)mtc_swipe_up;
 - (void)mtc_swipe_down;

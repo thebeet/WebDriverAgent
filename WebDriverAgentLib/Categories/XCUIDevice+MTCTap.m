@@ -7,7 +7,8 @@
 #import "XCUIElement+FBIsVisible.h"
 #import "XCUIElement+FBWebDriverAttributes.h"
 #import "FBApplication.h"
-
+#import "XCPointerEventPath.h"
+#import "XCSynthesizedEventRecord.h"
 #import "XCAXClient_iOS.h"
 #import "XCAccessibilityElement.h"
 
@@ -48,11 +49,30 @@ static FBApplication *app;
 }
 
 - (void)mtc_drag:(CGPoint)fromPoint to:(CGPoint)toPoint {
-    NSLog(@"drag at %fx%f to %fx%f, duration %f", fromPoint.x, fromPoint.y,
-          toPoint.x, toPoint.y, 0.1f);
-    XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
-    [eventGenerator pressAtPoint:fromPoint forDuration:0.1f liftAtPoint:toPoint velocity:1000 orientation:UIInterfaceOrientationPortrait name:@"swipe" handler:^(XCSynthesizedEventRecord *record, NSError *commandError) {
-    }];
+  NSLog(@"drag at %fx%f to %fx%f, duration %f", fromPoint.x, fromPoint.y,
+        toPoint.x, toPoint.y, 0.1f);
+  XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
+  [eventGenerator pressAtPoint:fromPoint forDuration:0.1f liftAtPoint:toPoint velocity:1000 orientation:UIInterfaceOrientationPortrait name:@"swipe" handler:^(XCSynthesizedEventRecord *record, NSError *commandError) {
+  }];
+}
+
+- (void)mtc_drag_path:(NSArray *)points {
+  NSDictionary *firstPoint = [points firstObject];
+  XCPointerEventPath *path = [[XCPointerEventPath alloc]
+                              initForTouchAtPoint:CGPointMake([[firstPoint valueForKey:@"x"] floatValue],
+                                                              [[firstPoint valueForKey:@"y"] floatValue])
+                              offset:0.0];
+  for (unsigned int i = 1; i < [points count]; i++) {
+    NSDictionary *point = [points objectAtIndex:i];
+    [path moveToPoint:CGPointMake([[point valueForKey:@"x"] floatValue],
+                                  [[point valueForKey:@"y"] floatValue])
+     atOffset:[[point valueForKey:@"offset"] floatValue]];
+  }
+  [path liftUpAtOffset:[[[points lastObject] valueForKey:@"offset"] floatValue]];
+  XCSynthesizedEventRecord *r = [[XCSynthesizedEventRecord alloc] initWithName:@"path" interfaceOrientation:UIInterfaceOrientationPortrait];
+  [r addPointerEventPath:path];
+  [r synthesizeWithError:nil];
+  NSLog(@"darg path %@", [path pointerEvents]);
 }
 
 - (void)mtc_swipe_up {
