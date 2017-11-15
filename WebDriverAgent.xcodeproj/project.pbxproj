@@ -37,6 +37,8 @@
 		71B49EC71ED1A58100D51AD6 /* XCUIElement+FBUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B49EC51ED1A58100D51AD6 /* XCUIElement+FBUID.h */; };
 		71B49EC81ED1A58100D51AD6 /* XCUIElement+FBUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B49EC61ED1A58100D51AD6 /* XCUIElement+FBUID.m */; };
 		71E95ADF1DC101BA002D0364 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174AF031D9D39AF008C8AD5 /* libxml2.tbd */; };
+		7A8CE8D41FBBDF0500F43381 /* XCUIReplayHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8CE8D21FBBDF0400F43381 /* XCUIReplayHelper.m */; };
+		7A8CE8D51FBBDF0500F43381 /* XCUIReplayHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A8CE8D31FBBDF0400F43381 /* XCUIReplayHelper.h */; };
 		7A8DE09F1F271C0B00D862EB /* MTCCustomCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A8DE09D1F271C0B00D862EB /* MTCCustomCommands.h */; };
 		7A8DE0A01F271C0B00D862EB /* MTCCustomCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8DE09E1F271C0B00D862EB /* MTCCustomCommands.m */; };
 		7A8DE0A71F271C6E00D862EB /* XCUIDevice+MTCAppHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A8DE0A11F271C6E00D862EB /* XCUIDevice+MTCAppHelper.h */; };
@@ -437,6 +439,8 @@
 		71B49EC51ED1A58100D51AD6 /* XCUIElement+FBUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBUID.h"; sourceTree = "<group>"; };
 		71B49EC61ED1A58100D51AD6 /* XCUIElement+FBUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBUID.m"; sourceTree = "<group>"; };
 		71E504941DF59BAD0020C32A /* XCUIElementAttributesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCUIElementAttributesTests.m; sourceTree = "<group>"; };
+		7A8CE8D21FBBDF0400F43381 /* XCUIReplayHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCUIReplayHelper.m; sourceTree = "<group>"; };
+		7A8CE8D31FBBDF0400F43381 /* XCUIReplayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCUIReplayHelper.h; sourceTree = "<group>"; };
 		7A8DE09D1F271C0B00D862EB /* MTCCustomCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCCustomCommands.h; sourceTree = "<group>"; };
 		7A8DE09E1F271C0B00D862EB /* MTCCustomCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCCustomCommands.m; sourceTree = "<group>"; };
 		7A8DE0A11F271C6E00D862EB /* XCUIDevice+MTCAppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIDevice+MTCAppHelper.h"; sourceTree = "<group>"; };
@@ -1020,6 +1024,8 @@
 		EE9AB78E1CAEDF0C008C271F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				7A8CE8D31FBBDF0400F43381 /* XCUIReplayHelper.h */,
+				7A8CE8D21FBBDF0400F43381 /* XCUIReplayHelper.m */,
 				71A7EAF71E224648001DA4F2 /* FBClassChainQueryParser.h */,
 				71A7EAF81E224648001DA4F2 /* FBClassChainQueryParser.m */,
 				EE9B76A11CF7A43900275851 /* FBConfiguration.h */,
@@ -1337,6 +1343,7 @@
 				EEE376451D59F81400ED88DD /* XCUIElement+FBUtilities.h in Headers */,
 				AD76723D1D6B7CC000610457 /* XCUIElement+FBTyping.h in Headers */,
 				EE158AB21CBD456F00A3E3F0 /* XCUIElement+FBScrolling.h in Headers */,
+				7A8CE8D51FBBDF0500F43381 /* XCUIReplayHelper.h in Headers */,
 				EE35AD361E3B77D600A02D78 /* XCSourceCodeTreeNode.h in Headers */,
 				EE35AD341E3B77D600A02D78 /* XCPointerEventPath.h in Headers */,
 				EE158AE11CBD456F00A3E3F0 /* FBRouteRequest.h in Headers */,
@@ -1787,6 +1794,7 @@
 				71A224E61DE2F56600844D55 /* NSPredicate+FBFormat.m in Sources */,
 				EEE376441D59F81400ED88DD /* XCUIDevice+FBRotation.m in Sources */,
 				71B49EC81ED1A58100D51AD6 /* XCUIElement+FBUID.m in Sources */,
+				7A8CE8D41FBBDF0500F43381 /* XCUIReplayHelper.m in Sources */,
 				EE158AE21CBD456F00A3E3F0 /* FBRouteRequest.m in Sources */,
 				EE158ADB1CBD456F00A3E3F0 /* FBResponseJSONPayload.m in Sources */,
 				EE7E271F1D06C69F001BEC7B /* FBXCTestCaseImplementationFailureHoldingProxy.m in Sources */,
