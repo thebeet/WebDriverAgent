@@ -50,7 +50,7 @@ static FBApplication *app;
 
 - (void)mtc_drag:(CGPoint)fromPoint to:(CGPoint)toPoint {
   NSLog(@"drag at %fx%f to %fx%f, duration %f", fromPoint.x, fromPoint.y,
-        toPoint.x, toPoint.y, 0.1f);
+        toPoint.x, toPoint.y, 0.2f);
   XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
   [eventGenerator pressAtPoint:fromPoint forDuration:0.1f liftAtPoint:toPoint velocity:1000 orientation:UIInterfaceOrientationPortrait name:@"swipe" handler:^(XCSynthesizedEventRecord *record, NSError *commandError) {
   }];

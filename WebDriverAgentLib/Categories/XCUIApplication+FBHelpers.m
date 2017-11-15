@@ -39,7 +39,7 @@ const static NSTimeInterval FBMinimumAppSwitchWait = 3.0;
 - (NSDictionary *)fb_tree
 {
   [self fb_waitUntilSnapshotIsStable];
-  return [self.class dictionaryForElement:self.fb_lastSnapshot];
+  return [self.class dictionaryForElement:self.fb_lastSnapshot withIndex:0 withTypeIndex:0];
 }
 
 - (NSDictionary *)fb_accessibilityTree
@@ -49,8 +49,9 @@ const static NSTimeInterval FBMinimumAppSwitchWait = 3.0;
   return [self.class accessibilityInfoForElement:self.fb_lastSnapshot];
 }
 
-+ (NSDictionary *)dictionaryForElement:(XCElementSnapshot *)snapshot
++ (NSDictionary *)dictionaryForElement:(XCElementSnapshot *)snapshot withIndex:(NSInteger)index withTypeIndex:(NSInteger)typeIndex
 {
+  /*
   NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
   info[@"type"] = [FBElementTypeTransformer shortStringWithElementType:snapshot.elementType];
   info[@"rawIdentifier"] = FBValueOrNull([snapshot.identifier isEqual:@""] ? nil : snapshot.identifier);
@@ -67,6 +68,47 @@ const static NSTimeInterval FBMinimumAppSwitchWait = 3.0;
     info[@"children"] = [[NSMutableArray alloc] init];
     for (XCElementSnapshot *childSnapshot in childElements) {
       [info[@"children"] addObject:[self dictionaryForElement:childSnapshot]];
+    }
+  }
+  return info;
+   */
+  
+  NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+  info[@"type"] = [FBElementTypeTransformer shortStringWithElementType:snapshot.elementType];
+  if (snapshot.isMainWindow) {
+    info[@"window"] = @"main";
+  }
+  //info[@"rawIdentifier"] = FBValueOrNull([snapshot.identifier isEqual:@""] ? nil : snapshot.identifier);
+  info[@"name"] = FBValueOrNull(snapshot.wdName);
+  info[@"value"] = FBValueOrNull(snapshot.wdValue);
+  info[@"label"] = FBValueOrNull(snapshot.wdLabel);
+  info[@"rect"] = snapshot.wdRect;
+  //info[@"frame"] = NSStringFromCGRect(snapshot.wdFrame);
+  //info[@"isEnabled"] = [@([snapshot isWDEnabled]) stringValue];
+  info[@"isVisible"] = [@([snapshot isWDVisible]) stringValue];
+  info[@"isVisible"] = @"1";
+  info[@"isEnabled"] = @"1";
+  info[@"index"] = [NSNumber numberWithInteger:index];
+  info[@"typeIndex"] = [NSNumber numberWithInteger:typeIndex];
+  
+  NSArray *childElements = snapshot.children;
+  if ([childElements count] && ([childElements count] < 128)) {
+    info[@"children"] = [[NSMutableArray alloc] init];
+    NSMutableDictionary *typeIndexs = [[NSMutableDictionary alloc] init];
+    NSInteger childIndex = 0;
+    for (XCElementSnapshot *childSnapshot in childElements) {
+      NSString *type = [FBElementTypeTransformer shortStringWithElementType:childSnapshot.elementType];
+      if (typeIndexs[type]) {
+        typeIndexs[type] = [NSNumber numberWithInteger:([typeIndexs[type] integerValue] + 1)] ;
+      } else {
+        typeIndexs[type] = [NSNumber numberWithInteger:0];
+      }
+      NSDictionary *child = [self dictionaryForElement:childSnapshot withIndex:childIndex withTypeIndex:[typeIndexs[type] integerValue]];
+      //if ([child[@"isVisible"] isEqualToString:@"1"]) {
+        [info[@"children"] addObject:child];
+        info[@"isVisible"] = @"1";
+      //}
+      childIndex += 1;
     }
   }
   return info;
