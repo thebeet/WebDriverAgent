@@ -195,10 +195,10 @@
 
 - (CGPoint)relativePointFromNode:(NSDictionary *)node
                     withPosition:(NSDictionary *)position {
-  CGRect rect = CGRectMake([node[@"rect"][@"x"] doubleValue], [node[@"rect"][@"y"] doubleValue],
-                           [node[@"rect"][@"width"] doubleValue], [node[@"rect"][@"height"] doubleValue]);
-  CGPoint point = CGPointMake(rect.origin.x + rect.size.width * [position[@"x"] doubleValue],
-                              rect.origin.y + rect.size.height * [position[@"y"] doubleValue]);
+  CGRect rect = CGRectMake((CGFloat)[node[@"rect"][@"x"] doubleValue], (CGFloat)[node[@"rect"][@"y"] doubleValue],
+                           (CGFloat)[node[@"rect"][@"width"] doubleValue], (CGFloat)[node[@"rect"][@"height"] doubleValue]);
+  CGPoint point = CGPointMake(rect.origin.x + rect.size.width * (CGFloat)[position[@"x"] doubleValue],
+                              rect.origin.y + rect.size.height * (CGFloat)[position[@"y"] doubleValue]);
   return point;
   
 }
