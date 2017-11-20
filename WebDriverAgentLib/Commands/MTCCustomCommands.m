@@ -154,8 +154,9 @@
 
 + (id<FBResponsePayload>)handleGetRotation:(FBRouteRequest *)request
 {
-  UIDeviceOrientation orientation = [XCUIDevice sharedDevice].orientation;
-  NSString *currentOrientation = @"portrait";
+  FBApplication *app = [FBApplication fb_activeApplication];
+  UIInterfaceOrientation orientation = app.interfaceOrientation;
+  NSString *currentOrientation = @"up";
   if (orientation == UIDeviceOrientationLandscapeLeft) {
     currentOrientation = @"left";
   }
