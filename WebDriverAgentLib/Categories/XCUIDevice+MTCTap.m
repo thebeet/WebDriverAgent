@@ -25,17 +25,21 @@ static FBApplication *app;
     
 }
 
+- (void)mtc_tap:(CGPoint)point withOrientation:(UIInterfaceOrientation)orientation {
+  NSLog(@"tap at %fx%f", point.x, point.y);
+  XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
+  XCEventGeneratorHandler handle = ^(XCSynthesizedEventRecord *record, NSError *commandError) {
+  };
+  if ([eventGenerator respondsToSelector:@selector(tapAtTouchLocations:numberOfTaps:orientation:handler:)]) {
+    [eventGenerator tapAtTouchLocations:@[[NSValue valueWithCGPoint:point]] numberOfTaps:1 orientation:orientation handler:handle];
+  }
+  else {
+    [eventGenerator tapAtPoint:point orientation:orientation handler:handle];
+  }
+}
+
 - (void)mtc_tap:(CGPoint)point {
-    NSLog(@"tap at %fx%f", point.x, point.y);
-    XCEventGenerator *eventGenerator = [XCEventGenerator sharedGenerator];
-    XCEventGeneratorHandler handle = ^(XCSynthesizedEventRecord *record, NSError *commandError) {
-    };
-    if ([eventGenerator respondsToSelector:@selector(tapAtTouchLocations:numberOfTaps:orientation:handler:)]) {
-        [eventGenerator tapAtTouchLocations:@[[NSValue valueWithCGPoint:point]] numberOfTaps:1 orientation:UIInterfaceOrientationPortrait handler:handle];
-    }
-    else {
-        [eventGenerator tapAtPoint:point orientation:UIInterfaceOrientationPortrait handler:handle];
-    }
+  [self mtc_tap:point withOrientation:UIInterfaceOrientationPortrait];
 }
 
 - (void)mtc_longtap:(CGPoint)point duration:(CGFloat)duration {
@@ -190,6 +194,7 @@ static FBApplication *app;
         app = [FBApplication fb_activeApplication];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             for (int i = 0; ; i++) {
+
                 if ([monkey_state isEqualToString:@"running"]) {
                     monkey_count += 1;
                     if (monkey_count > max_monkey_count) {
@@ -217,6 +222,34 @@ static FBApplication *app;
 
 - (void)mtc_monkey_start_with_limit_count:(int)count {
     max_monkey_count = monkey_count + count;
+  app = [FBApplication fb_activeApplication];
+  for (NSInteger i = 0; (i < 5) && [app.alerts count] > 0; i++) {
+    NSLog(@"alert");
+    /*NSString *title = [[app.alerts elementBoundByIndex:0] label];
+    NSLog(@"%@", [title substringToIndex:8]);
+    if ([[title substringToIndex:8] isEqualToString:@"打开“定位服务”来允许"]) {
+      if (app.alerts.buttons[@"取消"])
+    }*/
+    if ([app.alerts.buttons count] > 0) {
+      if ([app.alerts.buttons[@"OK"] exists]) {
+        NSLog(@"OK");
+        [app.alerts.buttons[@"OK"] tap];
+      } else if ([app.alerts.buttons[@"取消"] exists]) {
+        NSLog(@"取消");
+        [app.alerts.buttons[@"取消"] tap];
+      } else if ([app.alerts.buttons[@"好"] exists]) {
+        NSLog(@"好");
+        [app.alerts.buttons[@"好"] tap];
+      } else if ([app.alerts.buttons[@"Cancel"] exists]) {
+        NSLog(@"Cancel");
+        [app.alerts.buttons[@"Cancel"] tap];
+      } else {
+        NSLog(@"first button");
+        [[app.alerts.buttons elementBoundByIndex:0] tap];
+      }
+      [NSThread sleepForTimeInterval:2.0f];
+    }
+  }
     if ([monkey_state isEqualToString:@"init"]) {
         [self mtc_monkey];
     } else {

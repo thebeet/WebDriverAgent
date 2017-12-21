@@ -11,14 +11,14 @@
 
 @interface XCUIElementQuery ()
 {
-    BOOL _changesScope;
-    NSString *_queryDescription;
-    XCUIElementQuery *_inputQuery;
-    CDUnknownBlockType _filter;
-    unsigned long long _expressedType;
-    NSArray *_expressedIdentifiers;
-    NSOrderedSet *_lastInput;
-    NSOrderedSet *_lastOutput;
+  BOOL _changesScope;
+  NSString *_queryDescription;
+  XCUIElementQuery *_inputQuery;
+  CDUnknownBlockType _filter;
+  unsigned long long _expressedType;
+  NSArray *_expressedIdentifiers;
+  NSOrderedSet *_lastInput;
+  NSOrderedSet *_lastOutput;
 }
 
 @property(copy) NSOrderedSet *lastOutput; // @synthesize lastOutput=_lastOutput;
@@ -47,5 +47,8 @@
 - (id)_derivedExpressedIdentifiers;
 - (unsigned long long)_derivedExpressedType;
 - (id)initWithInputQuery:(id)arg1 queryDescription:(id)arg2 filter:(CDUnknownBlockType)arg3;
+
+/*! DO NOT USE DIRECTLY! Please use fb_firstMatch instead */
+- (XCUIElement *)firstMatch;
 
 @end

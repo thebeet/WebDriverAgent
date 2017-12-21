@@ -6,6 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XCUIDevice (MTCTap)
 
 - (void)mtc_tap:(CGPoint)point;
+- (void)mtc_tap:(CGPoint)point withOrientation:(UIInterfaceOrientation)orientation;
 
 - (void)mtc_longtap:(CGPoint)point duration:(CGFloat)duration;
 

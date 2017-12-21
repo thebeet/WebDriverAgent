@@ -93,6 +93,7 @@
     [[FBRoute GET:@"/orientation"].withoutSession respondWithTarget:self action:@selector(handleGetRotation:)],
     [[FBRoute POST:@"/orientation"].withoutSession respondWithTarget:self action:@selector(handleSetRotation:)],
     [[FBRoute GET:@"/test2"].withoutSession respondWithTarget:self action:@selector(handleTest:)],
+    //[[FBRoute POST:@"/siri"].withoutSession respondWithTarget:self action:@selector(handleSiriCommand:)],
 
   ];
 }
@@ -102,10 +103,10 @@
 
 + (id<FBResponsePayload>)handleTest:(FBRouteRequest *)request
 {
-  NSDictionary *script = request.arguments[@"script"];
-  XCUIReplayHelper *replayHelper = [[XCUIReplayHelper alloc] initWithApp:nil];
-  [replayHelper replayAction:script];
-  
+  NSLog(@"model: %@", [[UIDevice currentDevice] model]);
+  NSLog(@"localizedModel: %@", [[UIDevice currentDevice] localizedModel]);
+  NSLog(@"systemName: %@", [[UIDevice currentDevice] systemName]);
+  NSLog(@"systemVersion: %@", [[UIDevice currentDevice] systemVersion]);
   return FBResponseWithOK();
 }
 
@@ -114,6 +115,15 @@
   XCUIReplayHelper *helper = [[XCUIReplayHelper alloc] init];
   return FBResponseWithObject([helper getTree]);
 }
+
+/*
++ (id<FBResponsePayload>)handleSiriCommand:(FBRouteRequest *)request
+{
+  NSString *text = request.arguments[@"text"] ? request.arguments[@"text"] : @"";
+  XCUISiriService *siriService = [[XCUIDevice sharedDevice] siriService];
+  [siriService activateWithVoiceRecognitionText:text];
+   return FBResponseWithOK();
+}*/
 
 + (id<FBResponsePayload>)handleTerminalCommand:(FBRouteRequest *)request
 {
